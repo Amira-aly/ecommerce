@@ -20,20 +20,7 @@ class CartController extends Controller
     public function addToCart(Request $request,$id)
     {
         if(Auth::id()){
-            $user = Auth::user();
-            $Prodec = Prodect::find($id);
-            $cart = new Cart();
-            $cart->name = $Prodec->name;
-            $cart->email = $user->email;
-            $cart->description = $Prodec->description;
-            $cart->price = $Prodec->price;
-            $cart->quantity = $request->quantity;
-            $cart->selling_price = $Prodec->selling_price;
-            $cart->weight = $Prodec->weight;
-            $cart->image = $Prodec->image;
-            $cart->user_id = $user->id;
-            $cart->product_id = $Prodec->id;
-            $cart->save();
+            $cart = $this->cart->addToCart($request,$id);
             $countt = Cart::where('user_id',Auth::user()->id)->count();
             $viewcart = Cart::where('user_id',Auth::user()->id)->paginate(3);
             $Prodect = Prodect::all();
@@ -42,8 +29,6 @@ class CartController extends Controller
         {
             return redirect('login');
         }
-
-
     }
 
     public function showCart()
@@ -51,16 +36,25 @@ class CartController extends Controller
         $countt = Cart::where('user_id',Auth::user()->id)->count();
         $viewcart = Cart::where('user_id',Auth::user()->id)->paginate(3);
         $allProduct = Cart::where('user_id',Auth::user()->id)->get();
-        return view('Product.show_cart',compact('countt','viewcart','allProduct'));
+        if($allProduct->country_id=1){
+            $Shipping = 3;
+        }else{
+            $Shipping = 2;
+        }
+        return view('Product.show_cart',compact('countt','viewcart','allProduct','Shipping'));
     }
 
     public function destroy($id)
     {
-        Cart::find($id)->delete();
-        session()->flash('danger', 'You Deleted your Product ');
+        $cart = $this->cart->destroy($id);
         $countt = Cart::where('user_id',Auth::user()->id)->count();
         $viewcart = Cart::where('user_id',Auth::user()->id)->paginate(3);
         $allProduct = Cart::where('user_id',Auth::user()->id)->get();
-        return view('Product.show_cart',compact('countt','viewcart','allProduct'));
+        if($allProduct->country_id=1){
+            $Shipping = 3;
+        }else{
+            $Shipping = 2;
+        }
+        return view('Product.show_cart',compact('countt','viewcart','allProduct','Shipping'));
     }
 }

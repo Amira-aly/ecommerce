@@ -11,13 +11,13 @@ class CountrySeeder extends Seeder
         DB::table('countries')->delete();
 
         Country::create([
-            'name' => 'US',
-            'price' => '2',
+            'name' => 'UK',
+            'price' => '3',
             'weight' => '100'
         ]);
         Country::create([
-            'name' => 'UK',
-            'price' => '3',
+            'name' => 'US',
+            'price' => '2',
             'weight' => '100'
         ]);
         Country::create([

@@ -12,10 +12,10 @@
         </tr>
     </thead>
     <tbody>
-
+        @php $total = 0; @endphp
 
             @foreach($allProduct as $cart)
-            @php $total = $cart->price * $cart->quantity @endphp
+
                 <tr >
                     <td data-th="Product">
                         <div class="row">
@@ -25,11 +25,11 @@
                             </div>
                         </div>
                     </td>
-                    <td data-th="Price">${{ $cart->price }}</td>
+                    <td data-th="Price">{{ $cart->price }}$</td>
                     <td data-th="Quantity">
                         <input type="number" value="{{ $cart->quantity }}" class="form-control quantity update-cart" />
                     </td>
-                    <td data-th="Subtotal" class="text-center">${{ $cart->price * $cart->quantity }}</td>
+                    <td data-th="Subtotal" class="text-center">{{ $cart->price*$cart->quantity }}$</td>
                     <td class="actions" data-th="">
                         <form action="{{route('cart.destroy',$cart->id)}}" method="POST">
                             {{ method_field('Delete') }}
@@ -38,8 +38,8 @@
                         </form>
                     </td>
                 </tr>
-
-
+                @php $total= $total + ($cart->price*$cart->quantity); @endphp
+                @php $tax= $total/100 * 14; @endphp
                 <h3 colspan="5" type="hidden" class="text-right" value="{{$cart->price * $cart->quantity}}"></h3>
 
             @endforeach
@@ -47,7 +47,16 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="5" class="text-right"><h3><strong>Total ${{ $total }}</strong></h3></td>
+            <td colspan="5" class="text-left"><h3><strong>SumTotal : {{ $total }}$  </strong></h3></td>
+        </tr>
+        <tr>
+            <td colspan="5" class="text-left"><h3><strong>Tax : {{ $tax }}$  </strong></h3></td>
+        </tr>
+        <tr>
+            <td colspan="5" class="text-left"><h3><strong>Shipping Fee : {{ $Shipping }}$  </strong></h3></td>
+        </tr>
+        <tr>
+            <td colspan="5" class="text-left"><h3><strong>SumTotal : {{ $total+$tax+$Shipping }}$  </strong></h3></td>
         </tr>
         <tr>
             <td colspan="5" class="text-right">

@@ -14,18 +14,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@index');
+
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-// route category
-Route::resource('category','CategoryController');
-//route country
-Route::resource('country','CountryController');
-//route product
-Route::resource('product','ProdectController');
-//cart
-Route::resource('cart','CartController');
-Route::get('show_cart', 'CartController@showCart')->name('show_cart');
-Route::post('/add_cart/{id}', 'CartController@addToCart')->name('add_cart');
+Route::get('/', 'HomeController@index');
+Route::group(['prefix'=> 'user' ], function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+    // route category
+    Route::resource('category','CategoryController');
+    //route country
+    Route::resource('country','CountryController');
+    //route product
+    Route::resource('product','ProdectController');
+    //cart
+    Route::resource('cart','CartController');
+    Route::get('show_cart', 'CartController@showCart')->name('show_cart');
+    Route::post('/add_cart/{id}', 'CartController@addToCart')->name('add_cart');
+});
