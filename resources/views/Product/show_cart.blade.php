@@ -8,11 +8,13 @@
             <th style="width:10%">Price</th>
             <th style="width:8%">Quantity</th>
             <th style="width:22%" class="text-center">Subtotal</th>
+            <th style="width:8%">Weight</th>
             <th style="width:10%"></th>
         </tr>
     </thead>
     <tbody>
         @php $total = 0; @endphp
+        @php $Weight = 0; @endphp
 
             @foreach($allProduct as $cart)
 
@@ -30,6 +32,7 @@
                         <input type="number" value="{{ $cart->quantity }}" class="form-control quantity update-cart" />
                     </td>
                     <td data-th="Subtotal" class="text-center">{{ $cart->price*$cart->quantity }}$</td>
+                    <td class="text-center">{{ $cart->weight }}G</td>
                     <td class="actions" data-th="">
                         <form action="{{route('cart.destroy',$cart->id)}}" method="POST">
                             {{ method_field('Delete') }}
@@ -40,6 +43,7 @@
                 </tr>
                 @php $total= $total + ($cart->price*$cart->quantity); @endphp
                 @php $tax= $total/100 * 14; @endphp
+                @php $Weight= $Weight+($cart->weight*$cart->quantity/100) * $Shipping; @endphp
                 <h3 colspan="5" type="hidden" class="text-right" value="{{$cart->price * $cart->quantity}}"></h3>
 
             @endforeach
@@ -56,7 +60,10 @@
             <td colspan="5" class="text-left"><h3><strong>Shipping Fee : {{ $Shipping }}$  </strong></h3></td>
         </tr>
         <tr>
-            <td colspan="5" class="text-left"><h3><strong>SumTotal : {{ $total+$tax+$Shipping }}$  </strong></h3></td>
+            <td colspan="5" class="text-left"><h3><strong>Weight : {{ $Weight }}$  </strong></h3></td>
+        </tr>
+        <tr>
+            <td colspan="5" class="text-left"><h3><strong>SumTotal : {{ $total+$tax+$Shipping+$Weight }}$  </strong></h3></td>
         </tr>
         <tr>
             <td colspan="5" class="text-right">
